@@ -13,15 +13,68 @@ mode        : standalone # {selfcontained, draft}
 
 ## Time Series Decomposition in Data Analysis
 
-Historical data very often will consist of sequences of observations over time, what is referred to as a time series.
-
-Using time series decomposition as part of the exploratory data analysis can be useful even for data sets that, on the surface, are not based on time series.
-
-One possible use case is ruling out, or ruling in, cyclical factors when taking measurements. For example, when aggregating measurements from multiple sensors, spread out over an area, it would be useful to know if certain sensors go offline on a particular day or month. Cyclical patterns like that could possibly affect the distribution of the measurements.
+Historical data very often will consist of sequences of observations over time, what is referred to as a time series.Using time series decomposition as part of the exploratory data analysis can be useful even for data sets that, on the surface, are not based on time series.
 
 #### The Shiny App
 
-This shiny application provides a sandbox to experiment with time series decomposition, using the `ts` class to define time series objects. And then `decompose()` to perform Moving Average decomposition, Structural Time Series Models using `StructTS()`, and Seasonal Decomposition by Loess using `stl()`. The App has four predefined time series, with up to 15 years of daily data, and can also accept upload of univariate *.csv files.
+This shiny application provides a sandbox to experiment with time series decomposition, using the `ts` class to define time series objects. And then `decompose()` to perform Moving Average decomposition, Structural Time Series Models using `StructTS()`, and Seasonal Decomposition by Loess using `stl()`. The App has four predefined time series, with up to 15 years of daily data, and can also accept upload of univariate *.csv files. They are shown in the following sparklines.
+
+```{r echo=FALSE, fig.height=2.5, fig.width=3}
+
+sparkLine <- function(ydata=rnorm(10,500,50),width=1.5,height=0.5,sigfigs=4, plotName=NULL){
+  
+  temppar<-par(no.readonly=TRUE)
+  
+  par(mai=c(0.10,0.05,0.10,0.05),fin=c(width,height))
+  len<-length(ydata)
+  ymin<-min(ydata)
+  tmin<-which.min(ydata)
+  ymax<-max(ydata)
+  tmax<-which.max(ydata)
+  
+  yfin<-signif(ydata[len],sigfigs)
+  
+  plotrange=c(ymin-0.3*(ymax-ymin), ymax+0.3*(ymax-ymin))
+  
+  plot(x=1:len,y=ydata,type="l",xlim=c(1,len*1.5),ylim=plotrange,col="gray",lwd=0.5,ann=FALSE,axes=FALSE)
+
+  points(x=c(tmin,tmax),y=c(ymin,ymax),pch=19,col=c("red","blue"),cex=0.5)
+  
+  text(x=len, y=ymin, labels=signif(ymin,sigfigs),cex=0.5,pos=4,col="red")
+  
+  text(x=len, y=ymax, labels=signif(ymax,sigfigs),cex=0.5,pos=4,col="blue")
+  
+  if(is.null(plotName))
+  {
+      text(x=len, y=(ymin+ymax)/2,labels=yfin,cex=0.5,pos=4)
+  }else
+      {
+      text(x=len, y=(ymin+ymax)/2,labels=as.character(plotName),cex=0.5,pos=4)
+      }
+  
+  par(temppar)
+  
+}
+
+
+Freq <- readRDS("Freq1.rds")
+
+sparkLine(Freq, plotName="Freq1.rds")
+
+Freq <- readRDS("Freq2.rds")
+
+sparkLine(Freq, plotName="Freq2.rds")
+
+Freq <- readRDS("Freq3.rds")
+
+sparkLine(Freq, plotName="Freq3.rds")
+
+Freq <- readRDS("Freq4.rds")
+
+sparkLine(Freq, plotName="Freq4.rds")
+
+```
+
 
 --- .class #id 
 
@@ -75,6 +128,8 @@ Cleveland, R.B. *et. al*, *STL: A Seasonal Trend Decomposition Procedure Based o
 The App can be used to explore analyses with Time Series Decomposition, both with the four predefined time series, and by uploading a univariate time series via a *.csv file.
 
 Both predefined and uploaded time series can be explored via plots, and dynamic tabular views.
+
+One possible use case is ruling out, or ruling in, cyclical factors when taking measurements. For example, when aggregating measurements from multiple sensors, spread out over an area, it would be useful to know if certain sensors go offline on a particular day or month. Cyclical patterns like that could possibly affect the distribution of the measurements.
 
 While defining and explaining all these types of time series decompositions is beyond the scope of this Shiny App; it is my hope that this useful tool provides a spark of interest in the subject matter.
 
