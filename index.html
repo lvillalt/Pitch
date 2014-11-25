@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Time Series Decomposition App</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Time Series Decomposition App">
+  <meta name="author" content="lvillalt">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="http://slidifylibraries2.googlecode.com/git/inst/libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="http://slidifylibraries2.googlecode.com/git/inst/libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="http://slidifylibraries2.googlecode.com/git/inst/libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="http://slidifylibraries2.googlecode.com/git/inst/libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="http://slidifylibraries2.googlecode.com/git/inst/libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="http://slidifylibraries2.googlecode.com/git/inst/libraries/frameworks/io2012/js/slides" 
+    src="http://slidifylibraries2.googlecode.com/git/inst/libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Time Series Decomposition App</h1>
+    <h2>Developing Data Products Project</h2>
+    <p>lvillalt<br/></p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Time Series Decomposition in Data Analysis</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Historical data very often will consist of sequences of observations over time, what is referred to as a time series.</p>
+
+<p>Using time series decomposition as part of the exploratory data analysis can be useful even for data sets that, on the surface, are not based on time series.</p>
+
+<p>One possible use case is ruling out, or ruling in, cyclical factors when taking measurements. For example, when aggregating measurements from multiple sensors, spread out over an area, it would be useful to know if certain sensors go offline on a particular day or month. Cyclical patterns like that could possibly affect the distribution of the measurements.</p>
+
+<h4>The Shiny App</h4>
+
+<p>This shiny application provides a sandbox to experiment with time series decomposition, using the <code>ts</code> class to define time series objects. And then <code>decompose()</code> to perform Moving Average decomposition, Structural Time Series Models using <code>StructTS()</code>, and Seasonal Decomposition by Loess using <code>stl()</code>. The App has four predefined time series, with up to 15 years of daily data, and can also accept upload of univariate *.csv files.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Some types of Time Series models</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><strong>The Application calculates structural time series models using the R commands</strong> </p>
+
+<p><code>tsY &lt;- StructTS(Freq, type=&quot;trend&quot;)</code></p>
+
+<p><code>plot(cbind(fitted(tsY), resids=resid(tsY)))</code></p>
+
+<h4>Structural Time Series Models</h4>
+
+<p>\(y_t = \mu {_t} + \psi {_t} + \gamma {_t} + \epsilon {_t}, t = 1,..., T\)</p>
+
+<p>where \(\mu{_t}\), \(\psi {_t}\), \(\gamma {_t}\), and \(\epsilon {_t}\), are the trend, cycle, seasonal and irregular components respectively.</p>
+
+<p>The state space form of a time series model is made up of</p>
+
+<p>\(\alpha_t = T{_t}\alpha_{t - 1} + \eta {_t}, t = 1,..., T\) a <em>transition</em> equation,</p>
+
+<p>\(y_t = z{_t}'\alpha_{t} + \epsilon {_t}, t = 1,..., T\) and a <em>measurement</em> equation.</p>
+
+<p>Harvey, A.C. &amp; Peters, S., <em>Estimation Procedures for Structural Time
+Series Models</em>, Journal of Forecasting, Vol. 9, 89-108 (1990)</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>Seasonal Decomposition by Loess</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><strong>The Application calculates Seasonal Decomposition by Loess using the R command stl() as follows</strong> </p>
+
+<p><code>TimeSeries &lt;- ts(Freq, frequency=365)</code> <em>(for predefined time series)</em></p>
+
+<p><code>TimeSeries &lt;- ts(Freq, frequency=12)</code> <em>(for uploaded time series)</em></p>
+
+<p><code>plot(stl(TimeSeries, &quot;per&quot;))</code></p>
+
+<p>Cleveland defined STL for a model </p>
+
+<p>\(Y_v = T{_v} + S{_v} + R{_v}, v = 1,..., N\)</p>
+
+<p>where \(T{_v}\), \(S{_v}\), and \(R{_v}\) are the trend, seasonal, and residual components.</p>
+
+<p>Cleveland, R.B. <em>et. al</em>, <em>STL: A Seasonal Trend Decomposition Procedure Based on Loess</em>, Journal of Official Statistics, Vol. 6, No. 1, 3-73 (1990)</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>Possible Uses</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>The App can be used to explore analyses with Time Series Decomposition, both with the four predefined time series, and by uploading a univariate time series via a *.csv file.</p>
+
+<p>Both predefined and uploaded time series can be explored via plots, and dynamic tabular views.</p>
+
+<p>While defining and explaining all these types of time series decompositions is beyond the scope of this Shiny App; it is my hope that this useful tool provides a spark of interest in the subject matter.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='Time Series Decomposition in Data Analysis'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='Some types of Time Series models'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Seasonal Decomposition by Loess'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Possible Uses'>
+         4
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true
+      }
+    });
+  </script>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script> -->
+  <script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="http://slidifylibraries2.googlecode.com/git/inst/libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="http://slidifylibraries2.googlecode.com/git/inst/libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
